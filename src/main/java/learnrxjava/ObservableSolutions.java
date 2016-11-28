@@ -8,7 +8,7 @@ public class ObservableSolutions extends ObservableExercises {
 
     /**
      * Return an Observable that emits a single value "Hello World"
-     * 
+     *
      * @return "Hello World!"
      */
     public Observable<String> exerciseHello() {
@@ -37,38 +37,38 @@ public class ObservableSolutions extends ObservableExercises {
 
     /**
      * Flatten out all video in the stream of Movies into a stream of videoIDs
-     * 
-     * @param movieLists
+     *
+     * @param movies
      * @return Observable of Integers of Movies.videos.id
      */
     public Observable<Integer> exerciseConcatMap(Observable<Movies> movies) {
-        return movies.<Integer> concatMap(ml -> {
+        return movies.<Integer>concatMap(ml -> {
             return ml.videos.map(v -> v.id);
         });
     }
 
     /**
      * Flatten out all video in the stream of Movies into a stream of videoIDs
-     * 
+     *
      * Use flatMap this time instead of concatMap. In Observable streams
      * it is almost always flatMap that is wanted, not concatMap as flatMap
      * uses merge instead of concat and allows multiple concurrent streams
      * whereas concat only does one at a time.
-     * 
+     *
      * We'll see more about this later when we add concurrency.
-     * 
-     * @param movieLists
+     *
+     * @param movies
      * @return Observable of Integers of Movies.videos.id
      */
     public Observable<Integer> exerciseFlatMap(Observable<Movies> movies) {
-        return movies.<Integer> flatMap(ml -> {
+        return movies.<Integer>flatMap(ml -> {
             return ml.videos.map(v -> v.id);
         });
     }
 
     /**
      * Retrieve the largest number.
-     * 
+     *
      * Use reduce to select the maximum value in a list of numbers.
      */
     public Observable<Integer> exerciseReduce(Observable<Integer> nums) {
@@ -83,18 +83,18 @@ public class ObservableSolutions extends ObservableExercises {
 
     /**
      * Retrieve the id, title, and smallest box art url for every video.
-     * 
+     *
      * Now let's try combining reduce() with our other functions to build more complex queries.
-     * 
+     *
      * This is a variation of the problem we solved earlier, where we retrieved the url of the boxart with a
      * width of 150px. This time we'll use reduce() instead of filter() to retrieve the _smallest_ box art in
      * the boxarts list.
-     * 
+     *
      * See Exercise 19 of ComposableListExercises
      */
     public Observable<JSON> exerciseMovie(Observable<Movies> movies) {
         return movies.flatMap(ml -> {
-            return ml.videos.<JSON> flatMap(v -> {
+            return ml.videos.<JSON>flatMap(v -> {
                 return v.boxarts.reduce((max, box) -> {
                     int maxSize = max.height * max.width;
                     int boxSize = box.height * box.width;
@@ -112,7 +112,7 @@ public class ObservableSolutions extends ObservableExercises {
 
     /**
      * Combine 2 streams into pairs using zip.
-     * 
+     *
      * a -> "one", "two", "red", "blue"
      * b -> "fish", "fish", "fish", "fish"
      * output -> "one fish", "two fish", "red fish", "blue fish"

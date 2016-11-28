@@ -1,8 +1,8 @@
 package learnrxjava.examples;
+
 import java.util.concurrent.TimeUnit;
 
 import rx.Observable;
-
 
 public class ZipInterval {
 
@@ -11,6 +11,5 @@ public class ZipInterval {
         Observable.zip(data, Observable.interval(1, TimeUnit.SECONDS), (d, t) -> {
             return d + " " + t;
         }).toBlocking().forEach(System.out::println);
-        
     }
 }

@@ -1,4 +1,5 @@
 package learnrxjava.examples;
+
 import rx.Observable;
 import rx.Subscriber;
 import rx.schedulers.Schedulers;
@@ -35,7 +36,8 @@ public class ParallelExecution {
     private static void mergingSyncMadeAsync() {
         // if you have something synchronous and want to make it async, you can schedule it like this
         // so here we see both executed concurrently
-        Observable.merge(getDataSync(1).subscribeOn(Schedulers.io()), getDataSync(2).subscribeOn(Schedulers.io())).toBlocking().forEach(System.out::println);
+        Observable.merge(getDataSync(1).subscribeOn(Schedulers.io()),
+                         getDataSync(2).subscribeOn(Schedulers.io())).toBlocking().forEach(System.out::println);
     }
 
     private static void flatMapExampleAsync() {
@@ -54,12 +56,12 @@ public class ParallelExecution {
         Observable.range(0, 5000).buffer(500).flatMap(i -> {
             return Observable.from(i).subscribeOn(Schedulers.computation()).map(item -> {
                 // simulate computational work
-                    try {
-                        Thread.sleep(1);
-                    } catch (Exception e) {
-                    }
-                    return item + " processed " + Thread.currentThread();
-                });
+                try {
+                    Thread.sleep(1);
+                } catch (Exception e) {
+                }
+                return item + " processed" + Thread.currentThread();
+            });
         }).toBlocking().forEach(System.out::println);
     }
 
@@ -67,12 +69,12 @@ public class ParallelExecution {
         Observable.range(0, 5000).window(500).flatMap(work -> {
             return work.observeOn(Schedulers.computation()).map(item -> {
                 // simulate computational work
-                    try {
-                        Thread.sleep(1);
-                    } catch (Exception e) {
-                    }
-                    return item + " processed " + Thread.currentThread();
-                });
+                try {
+                    Thread.sleep(1);
+                } catch (Exception e) {
+                }
+                return item + " processed " + Thread.currentThread();
+            });
         }).toBlocking().forEach(System.out::println);
     }
 
@@ -84,13 +86,13 @@ public class ParallelExecution {
     static Observable<Integer> getDataSync(int i) {
         return Observable.create((Subscriber<? super Integer> s) -> {
             // simulate latency
-                try {
-                    Thread.sleep(1000);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                s.onNext(i);
-                s.onCompleted();
-            });
+            try {
+                Thread.sleep(1000);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            s.onNext(i);
+            s.onCompleted();
+        });
     }
 }
